@@ -1,0 +1,13 @@
+{
+    "**PLEASE UPDATE WFS PATHS BELOW**": "",
+    "wfs_paths":{
+        "WFS_roads_path":"roads",
+        "WFS_project_locations_path":"project_locations",
+        "WFS_project_listings_path":"project_listings"
+    },
+    "temp_paths":{
+        "roads_buffer": "roads_buffer",
+        "roads_buffer_clip": "roads_buffer_clip",
+        "roads_buffer_clip2": "roads_buffer_clip2"
+    }
+}
