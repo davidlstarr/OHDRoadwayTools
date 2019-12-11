@@ -19,14 +19,39 @@ with open(arcpy.env.workspace+'/config.json') as json_data_file:
 # Local variables:
 project_locations = data["wfs_paths"]["WFS_project_locations_path"]
 project_listings = data["wfs_paths"]["WFS_project_listings_path"]
+temp_project_listings_layer = "temp_project_listings_layer"
+roads_buffer_clip2 = data["temp_paths"]["roads_buffer_clip2"]
 field = "CCID"
-cursor = arcpy.SearchCursor(project_listings)
+
+
+arcpy.MakeFeatureLayer_management(in_features="project_listings", out_layer=temp_project_listings_layer, where_clause="", workspace="", field_info="OBJECTID OBJECTID VISIBLE NONE;Shape Shape VISIBLE NONE;CCID CCID VISIBLE NONE;Shape_Length Shape_Length VISIBLE NONE;Shape_Area Shape_Area VISIBLE NONE;UPDATEUSER UPDATEUSER VISIBLE NONE;CONSTR_CONTRACT_NO CONSTR_CONTRACT_NO VISIBLE NONE;PE_FMIS_ID_NO PE_FMIS_ID_NO VISIBLE NONE;PROJECT_TYPE_ID PROJECT_TYPE_ID VISIBLE NONE;PROJECT_TYPE PROJECT_TYPE VISIBLE NONE;DESIGN_BUILD DESIGN_BUILD VISIBLE NONE;FUND_SOURCE FUND_SOURCE VISIBLE NONE;DESCRIPTION DESCRIPTION VISIBLE NONE;ISARCHIVED ISARCHIVED VISIBLE NONE;PROJSTART PROJSTART VISIBLE NONE;ACTUAL_AD ACTUAL_AD VISIBLE NONE;LEAD_DIVISION_ID LEAD_DIVISION_ID VISIBLE NONE;STATUS_ID STATUS_ID VISIBLE NONE;STATUS STATUS VISIBLE NONE;DISPLAYNAME DISPLAYNAME VISIBLE NONE;ENGINEER_ID ENGINEER_ID VISIBLE NONE;COUNTY_ID COUNTY_ID VISIBLE NONE;COUNTY_NAME COUNTY_NAME VISIBLE NONE;PRIMARY_ROUTE PRIMARY_ROUTE VISIBLE NONE;DISTRICT_ID DISTRICT_ID VISIBLE NONE")
+cursor = arcpy.SearchCursor(temp_project_listings_layer)
+project_listings_temp_feature_count = int(arcpy.GetCount_management(temp_project_listings_layer).getOutput(0))
+if project_listings_temp_feature_count == 1:
+    arcpy.AddMessage("1 project listings layer selected!")
+else:
+    arcpy.AddError(
+        "{1} rows were selected or no row is selected in project listings. Please select a project in project listings or select only 1 project in project listings.".format(
+            temp_project_listings_layer, project_listings_temp_feature_count))
+    exit()
+
+arcpy.SelectLayerByLocation_management(project_locations, "ARE IDENTICAL TO", roads_buffer_clip2)
 
 # Process: Calculate Field
+
 
 for row in cursor:
     arcpy.AddMessage(row.getValue(field))
     CCID = row.getValue(field)
-    arcpy.CalculateField_management(in_table=project_locations, field="project_locations.CCID", expression=CCID, expression_type="PYTHON3", code_block="")
+
+    project_locations_feature_count = int(arcpy.GetCount_management("project_locations").getOutput(0))
+    if project_locations_feature_count == 1:
+        feature_count_str = str(project_locations_feature_count)
+        arcpy.AddMessage(feature_count_str+" row was selected in the project_locations layer!")
+        arcpy.CalculateField_management(in_table=project_locations, field="CCID", expression=CCID, expression_type="PYTHON3", code_block="")
+    else:
+        arcpy.AddError("Please reselect your project. {1} rows were selected. Either 0 rows were selected or more than 1 row was selected from the project_locations layer.".format("project_locations", project_locations_feature_count))
+
+
 
 

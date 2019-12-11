@@ -20,14 +20,18 @@ with open(arcpy.env.workspace+'/config.json') as json_data_file:
 roads_buffer_clip2 = data["temp_paths"]["roads_buffer_clip2"]
 project_locations = data["wfs_paths"]["WFS_project_locations_path"]
 project_listings = data["wfs_paths"]["WFS_project_listings_path"]
+project_locations_temp_layer = "project_locations_temp_layer"
+project_listings_temp_layer = "project_listings_temp_layer"
+
+project_listings_path = r"" + arcpy.env.workspace + "\\project_listings"
+project_locations_path = r"" + arcpy.env.workspace + "\\project_locations"
 
 # Process: Join
+# arcpy.MakeFeatureLayer_management(in_features=project_locations, out_layer=project_locations_temp_layer, where_clause="", workspace="")
+# arcpy.MakeFeatureLayer_management(in_features=project_listings, out_layer=project_listings_temp_layer, where_clause="", workspace="")
+# arcpy.CopyFeatures_management(in_features=project_locations, out_feature_class=project_locations_temp_layer, config_keyword="", spatial_grid_1="", spatial_grid_2="", spatial_grid_3="")
+# arcpy.CopyFeatures_management(in_features=project_listings, out_feature_class=project_listings_temp_layer, config_keyword="", spatial_grid_1="", spatial_grid_2="", spatial_grid_3="")
 
-try:
-    arcpy.AddJoin_management(project_locations, "CCID", project_listings, "CCID")
-except BaseException as e:
-    pass
-
-
+arcpy.AddJoin_management(in_layer_or_view=project_locations_path, in_field="CCID", join_table=project_listings_path, join_field="CCID", join_type="KEEP_ALL")
 
 
