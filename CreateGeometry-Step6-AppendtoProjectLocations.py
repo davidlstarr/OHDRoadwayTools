@@ -28,9 +28,9 @@ arcpy.Append_management(inputs=roads_buffer_clip2, target=project_locations, sch
 
 arcpy.SelectLayerByLocation_management(project_locations, "ARE IDENTICAL TO", roads_buffer_clip2)
 
-aprx = arcpy.mp.ArcGISProject("CURRENT")
-map = aprx.listMaps()[0]  # assumes data to be added to first map listed
-roads_clip_layer = map.listLayers("roads_buffer_clip2")[0]
-
-map.removeLayer(roads_clip_layer)
+# aprx = arcpy.mp.ArcGISProject("CURRENT")
+# map = aprx.listMaps()[0]  # assumes data to be added to first map listed
+# roads_clip_layer = map.listLayers("roads_buffer_clip2")[0]
+#
+# map.removeLayer(roads_clip_layer)
 
