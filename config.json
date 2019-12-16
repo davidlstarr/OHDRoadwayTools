@@ -1,9 +1,9 @@
 {
     "**PLEASE UPDATE WFS PATHS BELOW**": "",
     "wfs_paths":{
-        "WFS_roads_path":"roads",
-        "WFS_project_locations_path":"https://services1.arcgis.com/oS5ru2iHb8I5vlTv/arcgis/rest/services/SHA_OHD_Roadway_Projects_Map/FeatureServer/0",
-        "WFS_project_listings_path":"https://services1.arcgis.com/oS5ru2iHb8I5vlTv/arcgis/rest/services/SHA_OHD_Roadway_Projects_Map/FeatureServer/1"
+        "WFS_roads_path":"",
+        "WFS_project_locations_path":"",
+        "WFS_project_listings_path":""
     },
     "temp_paths":{
         "roads_buffer": "roads_buffer",
